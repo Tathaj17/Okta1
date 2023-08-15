@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Custom Login Page</title>
+  <style>
+    h1 {
+      margin: 2em 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Custom Login Page</h1>
+    <div id="messageBox" class="jumbotron">
+      You are not logged in. Get outta here! Shoo! >:S
+    </div>
+    <!-- Custom login form -->
+    <form id="custom-login-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <button type="submit">submit</button>
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+  <script type="text/javascript">
+    var customLoginForm = document.getElementById('custom-login-form');
+    customLoginForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent form submission
+
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+
+      // Perform authentication using Okta API
+      axios.post('https://dev-31932171.okta.com/api/v1/authn', {
+        username: username,
+        password: password
+      }).then(function (response) {
+        // Handle authentication success
+        var accessToken = response.data.sessionToken;
+        // Handle tokens and user experience here
+
+        // For illustration purposes, update the message box
+        document.getElementById("messageBox").innerHTML = "Hello, " + username + "! You just logged in! :)";
+      }).catch(function (error) {
+        console.error(error);
+        // Handle authentication error
+        document.getElementById("messageBox").innerHTML = "Login failed. Please check your credentials.";
+      });
+    });
+  </script>
+</body>
+</html>
